@@ -21,7 +21,7 @@ port(
     );
 end entity;
 
-architecture systolic_node_arch of systoclic_node is
+architecture systolic_node_arch of systolic_node is
     signal r_count : signed(2*operable_bits downto 0);
     signal up_val: signed(operable_bits downto 0);
     signal left_val: signed(operable_bits downto 0);
