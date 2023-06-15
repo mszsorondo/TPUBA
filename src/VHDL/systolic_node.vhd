@@ -4,8 +4,7 @@ use IEEE.numeric_std.all;
 use IEEE.math_real.all;
 
 entity systolic_node is
-generic(N_dim : natural := 4;
-        operable_bits: natural := 16);
+generic(operable_bits: natural := 16);
 
 port(
     clk_i : in std_logic;
