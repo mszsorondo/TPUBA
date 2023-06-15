@@ -16,8 +16,8 @@ port(
     left_i : in signed(operable_bits downto 0); -- luego pasar a floats
     down_o : out signed(operable_bits downto 0);
     right_o : out signed(operable_bits downto 0);
-    ed_o: out std_logic;;
-    er_o: out std_logic;
+    ed_o: out std_logic;
+    er_o: out std_logic
     );
 end entity;
 
