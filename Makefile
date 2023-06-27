@@ -1,10 +1,10 @@
 # vhdl files
 FILES = src/VHDL/systolic_node.vhd
-DUT:=Systolic_node
+DUT:=systolic_node
 
 # testbench
 TESTBENCHFILE = ${DUT}_tb
-TESTBENCHPATH = Code/VHDL/${TESTBENCHFILE}.vhd
+TESTBENCHPATH = src/VHDL/testbenches/${TESTBENCHFILE}.vhd
 
 #GHDL CONFIG
 

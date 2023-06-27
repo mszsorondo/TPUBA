@@ -11,29 +11,31 @@ port(
     reset_i : in std_logic;
     el_i : in std_logic;
     eu_i: in std_logic;
-    up_i : in signed(operable_bits downto 0);
-    left_i : in signed(operable_bits downto 0); -- luego pasar a floats
-    down_o : out signed(operable_bits downto 0);
-    right_o : out signed(operable_bits downto 0);
+    up_i : in signed(operable_bits-1 downto 0);
+    left_i : in signed(operable_bits-1 downto 0); -- luego pasar a floats
+    down_o : out signed(operable_bits-1 downto 0);
+    right_o : out signed(operable_bits-1 downto 0);
     ed_o: out std_logic;
-    er_o: out std_logic
+    er_o: out std_logic;
+    res_o: out signed(operable_bits*2-1 downto 0)
     );
 end entity;
 
 architecture systolic_node_arch of systolic_node is
-    signal r_count : signed(2*operable_bits downto 0);
-    signal up_val: signed(operable_bits downto 0);
-    signal left_val: signed(operable_bits downto 0);
+    signal r_count : signed((2*operable_bits)-1 downto 0) := to_signed(0, 2*operable_bits);
+    signal r_count_next : signed((2*operable_bits)-1 downto 0) := to_signed(0, 2*operable_bits);
+    signal up_val: signed(operable_bits-1 downto 0);
+    signal left_val: signed(operable_bits-1 downto 0);
 
     begin
-        SYSTOLIC_NODE_PROC: process(ckl_i, up_i, right_i)
+        SYSTOLIC_NODE_PROC: process(clk_i, up_i, left_i)
             begin
-                if rising_edge(ckl_i) then
-                    if reset_i then
-                        r_count <= (others => '0');
+                if rising_edge(clk_i) then
+                    if (reset_i = '1') then
+                        r_count <= to_signed(0, 2*  operable_bits);
                     else
-                        if (el_i and eu_i) then
-
+                    if (el_i and eu_i) ='1' then
+                            r_count <= r_count_next;
                             down_o <= up_val;
                             right_o <= left_val;
                             ed_o <= '1';
@@ -41,10 +43,12 @@ architecture systolic_node_arch of systolic_node is
                         end if;
                     end if;
                 end if;
-            end process;
-        r_count <= r_count + up_i*left_i;
+            end process; 
+        
+        r_count_next <= r_count + resize(up_i*left_i, 2* operable_bits);
         up_val <= up_i;
         left_val <= left_i;
+        res_o <= r_count;
     end architecture;
     
 
