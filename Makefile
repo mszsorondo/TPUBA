@@ -1,6 +1,6 @@
 # vhdl files
-FILES = src/VHDL/systolic_node.vhd
-DUT:=systolic_node
+FILES = src/VHDL/systolic_node.vhd src/VHDL/systolic_array_pkg.vhd src/VHDL/systolic_array.vhd
+DUT:=systolic_array
 
 # testbench
 TESTBENCHFILE = ${DUT}_tb

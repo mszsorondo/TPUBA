@@ -8,11 +8,13 @@ package systolic_array_pkg is
     constant operable_bits: natural := 16;
 
     --Types
-    type systolic_array_input_vector is array(integer range <>) of signed(operable_bits downto 0);
-    type systolic_array_input_mtx is array (integer range <>) of systolic_array_input_vector(integer range <>);
+    
+    type systolic_array_input_vector is array(integer range <>) of signed(operable_bits-1 downto 0);
+    type systolic_array_output_vector is array(integer range <>) of signed(operable_bits*2-1 downto 0);
+    type systolic_array_input_mtx is array (integer range <>) of systolic_array_input_vector(2 downto 0);
     type handShakeBuffer is array (integer range <>) of std_logic;
     type int_array is array(integer range <>) of integer;
-    type int_matrix is array(integer range <>) of int_array;
+    type int_matrix is array(integer range <>) of int_array(2 downto 0);
 
     --Functions
     function get_downwards_buffer_index(iteration_num: in natural; dimension: in natural)

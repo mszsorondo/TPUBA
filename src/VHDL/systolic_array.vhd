@@ -12,9 +12,9 @@ entity systolic_array is
     port(
         clk_i : in std_logic;
         reset_i : in std_logic;
-        bufferA_i : in systolic_array_input_vector(dimension downto 0);
-        bufferB_i : in systolic_array_input_vector(dimension downto 0);
-        bufferC_o : out systolic_array_input_vector(dimension downto 0)
+        bufferA_i : in systolic_array_input_vector(dimension-1 downto 0);
+        bufferB_i : in systolic_array_input_vector(dimension-1 downto 0);
+        bufferC_o : out systolic_array_output_vector(dimension*dimension downto 0)
         );
 end entity;
 
@@ -50,8 +50,8 @@ architecture systolic_array_arch of systolic_array is
                 input_assignment: for i in 0 to dimension-1 loop
                     downwards_buffer(i) <= bufferA_i(i);
                     en_downwards(i) <= '1';
-                    rightwise_buffer(i) <= bufferB_i(i*dimension);
-                    en_rightwise(i) <= '1';
+                    rightwise_buffer(i*dimension) <= bufferB_i(i);
+                    en_rightwise(i*dimension) <= '1';
                 end loop;
             end if;
         end process ; -- input
