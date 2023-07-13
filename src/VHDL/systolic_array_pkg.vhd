@@ -32,10 +32,10 @@ package body systolic_array_pkg is
         return natural is
             variable result: natural;
         begin
-            if iteration_num >= dimension*(dimension-1) then
+            if iteration_num < dimension then
                 result := dimension*dimension;
             else 
-                result := iteration_num + dimension;
+                result := iteration_num - dimension;
             end if;
             return result;
     end get_downwards_buffer_index;
@@ -44,10 +44,10 @@ package body systolic_array_pkg is
         return natural is
             variable result: natural;
         begin
-            if iteration_num mod dimension = dimension-1 then
+            if iteration_num mod dimension = integer(0) then
                 result := dimension*dimension;
             else 
-                result := iteration_num+1;
+                result := iteration_num-1;
             end if;
             return result;
     end get_rightwise_buffer_index;

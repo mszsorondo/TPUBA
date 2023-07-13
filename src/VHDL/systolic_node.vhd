@@ -22,32 +22,32 @@ port(
 end entity;
 
 architecture systolic_node_arch of systolic_node is
-    signal r_count : signed((2*operable_bits)-1 downto 0) := to_signed(0, 2*operable_bits);
-    signal r_count_next : signed((2*operable_bits)-1 downto 0) := to_signed(0, 2*operable_bits);
+    signal r_count : signed((2*operable_bits)-1 downto 0);
+    signal r_count_next : signed((2*operable_bits)-1 downto 0);
     signal up_val: signed(operable_bits-1 downto 0);
     signal left_val: signed(operable_bits-1 downto 0);
+    signal prod: signed((2*operable_bits)-1 downto 0);
 
     begin
-        SYSTOLIC_NODE_PROC: process(clk_i, up_i, left_i)
+        SYSTOLIC_NODE_PROC: process(clk_i)    
             begin
                 if rising_edge(clk_i) then
                     if (reset_i = '1') then
                         r_count <= to_signed(0, 2*  operable_bits);
-                    else
-                    if (el_i and eu_i) ='1' then
+                    elsif (el_i and eu_i) ='1' then
                             r_count <= r_count_next;
                             down_o <= up_val;
                             right_o <= left_val;
                             ed_o <= '1';
                             er_o <= '1';
-                        end if;
                     end if;
                 end if;
             end process; 
         
-        r_count_next <= r_count + resize(up_i*left_i, 2* operable_bits);
+        prod <= up_i*left_i;
         up_val <= up_i;
         left_val <= left_i;
+        r_count_next <= r_count + prod;
         res_o <= r_count;
     end architecture;
     

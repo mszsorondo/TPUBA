@@ -26,7 +26,7 @@ architecture systolic_array_arch of systolic_array is
     signal downwards_buffer, rightwise_buffer: systolic_array_input_vector(dimension*dimension downto 0);
 
     begin
-        NODES: for i in 0 to (dimension*dimension)-1 generate
+        NODES: for i in (dimension*dimension)-1 downto 0 generate
             NODE_ITERATION: entity work.systolic_node            
             generic map(operable_bits => 16)
 
@@ -44,16 +44,23 @@ architecture systolic_array_arch of systolic_array is
                 );
         end generate;
 
-        input : process(clk_i, bufferA_i, bufferB_i)
+        input : process(clk_i)
         begin
             if rising_edge(clk_i) then
-                input_assignment: for i in 0 to dimension-1 loop
-                    downwards_buffer(i) <= bufferA_i(i);
-                    en_downwards(i) <= '1';
-                    rightwise_buffer(i*dimension) <= bufferB_i(i);
-                    en_rightwise(i*dimension) <= '1';
-                end loop;
+                if reset_i = '1' then
+                    en_downwards <= (others => '0');
+                    en_rightwise <= (others => '0');
+                    downwards_buffer <= (others => (others => '0'));
+                    rightwise_buffer <= (others => (others => '0'));
+                else
+                    input_assignment: for i in 0 to dimension-1 loop
+                        downwards_buffer((dimension*dimension)-1-i) <= bufferB_i(dimension-1-i);
+                        en_downwards((dimension*dimension)-1-i) <= '1';
+                        rightwise_buffer((dimension*dimension)-1 - (i*dimension) ) <= bufferA_i(dimension-1-i);
+                        en_rightwise((dimension*dimension)-1 - (i*dimension)) <= '1';
+                    end loop;
+                end if;
             end if;
-        end process ; -- input
+        end process; -- input
 
 end architecture; -- systolic_array_arhc
